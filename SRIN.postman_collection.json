@@ -1,0 +1,160 @@
+{
+	"info": {
+		"_postman_id": "8b95c1d6-43ba-4c7e-b934-7787e1b53f47",
+		"name": "SRIN",
+		"description": "API documentation for SRIN Assignment. Created by Daniel Haryadi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "784848"
+	},
+	"item": [
+		{
+			"name": "employee",
+			"protocolProfileBehavior": {
+				"strictSSL": false,
+				"followRedirects": false
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/employee",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employee"
+					]
+				},
+				"description": "shows all the employee"
+			},
+			"response": []
+		},
+		{
+			"name": "employee",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Christiano Ronaldo\",\r\n    \"gender\" : \"M\",\r\n    \"birthDate\" : \"1985-02-05\",\r\n    \"hireDate\" : \"2021-09-08\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/employee",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employee"
+					]
+				},
+				"description": "create a record for employee"
+			},
+			"response": []
+		},
+		{
+			"name": "employeeById",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/employee/62b31ed0de6d035ea83cb4c2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employee",
+						"62b31ed0de6d035ea83cb4c2"
+					]
+				},
+				"description": "shows the employee by id"
+			},
+			"response": []
+		},
+		{
+			"name": "employee",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Christin Christin\",\r\n    \"gender\" : \"M\",\r\n    \"birthDate\" : \"1985-02-05\",\r\n    \"hireDate\" : \"2021-09-08\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/employee/62b31ed0de6d035ea83cb4c2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employee",
+						"62b31ed0de6d035ea83cb4c2"
+					]
+				},
+				"description": "update an employee by id"
+			},
+			"response": []
+		},
+		{
+			"name": "employee",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Christiano Ronaldo\",\r\n    \"gender\" : \"M\",\r\n    \"birthDate\" : \"1985-02-05\",\r\n    \"hireDate\" : \"2021-09-08\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/employee/62b31ed0de6d035ea83cb4c2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employee",
+						"62b31ed0de6d035ea83cb4c2"
+					]
+				},
+				"description": "delete an employee by id"
+			},
+			"response": []
+		}
+	]
+}
