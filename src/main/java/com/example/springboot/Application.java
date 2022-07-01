@@ -1,10 +1,14 @@
 package com.example.springboot;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
@@ -18,7 +22,7 @@ public class Application {
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
-			
+
 			/*
 			System.out.println("Let's inspect the beans provided by Spring Boot:");
 
@@ -29,7 +33,18 @@ public class Application {
 			}*/
 		};
 	}
-	
-	
-	
+
+
+	@Autowired
+	private CacheManager cacheManager;
+
+	@EventListener
+	public void onApplicationEvent(ApplicationReadyEvent event) {
+		cacheManager.getCacheNames().parallelStream().forEach(n -> {
+			System.out.println(n);
+			cacheManager.getCache(n).clear();
+
+		});
+	}
+
 }

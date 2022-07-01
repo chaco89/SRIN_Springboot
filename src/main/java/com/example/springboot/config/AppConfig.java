@@ -1,11 +1,9 @@
 package com.example.springboot.config;
 
 import java.time.LocalDate;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
-
 import com.example.springboot.annotation.Json;
 import com.example.springboot.dto.ResourceDto;
 import com.example.springboot.dto.ResourceDto.ResourceDtoSerializer;
@@ -19,7 +17,8 @@ import com.google.gson.GsonBuilder;
 
 @Configuration
 public class AppConfig {
-   
+  
+	
     @Bean
     public Gson gson() {
     	 GsonBuilder gsonBuilder = new GsonBuilder();

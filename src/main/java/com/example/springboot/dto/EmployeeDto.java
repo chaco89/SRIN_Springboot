@@ -13,22 +13,22 @@ public class EmployeeDto {
 	@Expose
 	@SerializedName(JsonKey.ID)
 	private String id;
-	
+
 	@Expose
-    @SerializedName(JsonKey.NAME)
+	@SerializedName(JsonKey.NAME)
 	private String name;
 
 	@Expose
-    @SerializedName(JsonKey.GENDER)
+	@SerializedName(JsonKey.GENDER)
 	private String gender;
-	
+
 	@Expose
-    @SerializedName(JsonKey.BIRTH_DATE)
-    private LocalDate birthDate;
-	
+	@SerializedName(JsonKey.BIRTH_DATE)
+	private LocalDate birthDate;
+
 	@Expose
-    @SerializedName(JsonKey.HIRE_DATE)
-    private LocalDate hireDate;
+	@SerializedName(JsonKey.HIRE_DATE)
+	private LocalDate hireDate;
 
 	public String getId() {
 		return id;
@@ -69,6 +69,10 @@ public class EmployeeDto {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return id; // this can be used as cache
+	}
+
 }
