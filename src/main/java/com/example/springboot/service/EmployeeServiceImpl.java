@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Service;
@@ -20,45 +22,17 @@ import com.example.springboot.util.EmployeeUtil;
 
 @Import({ RedisConfig.class })
 @EnableCaching
-/*
-@ImportAutoConfiguration(classes = {
-		CacheAutoConfiguration.class,
-		RedisAutoConfiguration.class
-})*/
 @Service("employeeService")
 public class EmployeeServiceImpl implements EmployeeService {
+
+	final String EMPLOYEEE_LIST_CACHE = "EMP_CACHE";
+	final String EMPLOYEEE_SINGLE_CACHE = "EMP_SINGLE_CACHE";
+
 	@Autowired
 	public EmployeeDao employeeDao;
 
 	@Override
-	@CacheEvict(value = {"employeeCache", "employeeCacheId"}, allEntries = true)
-	public void createEmployee(EmployeeDto employeeDto) {
-		employeeDao.save(EmployeeUtil.toEntity(employeeDto));
-	}
-
-	@Override
-	//@CacheEvict(value = "first", key = "#cacheKey")
-	@CacheEvict(value = {"employeeCache", "employeeCacheId"}, allEntries = true)
-	public void updateEmployee(EmployeeDto employeeDto) {
-		Optional<Employee> emp = employeeDao.findById(employeeDto.getId());
-
-		if(emp.isPresent()) {
-			Employee model = emp.get();
-			EmployeeUtil.update(model, employeeDto);
-			employeeDao.save(model);
-		}
-	}
-
-	@Override
-	@CacheEvict(value = {"employeeCache", "employeeCacheId"}, allEntries = true)
-	public void deleteEmployeeById(String id) {
-		employeeDao.deleteById(id);
-	}
-
-
-
-	@Override
-	@Cacheable(value = "employeeCache")
+	@Cacheable(value = EMPLOYEEE_LIST_CACHE)
 	public List<EmployeeDto> findAllEmployee() {
 		List<Employee> list = employeeDao.findAll();
 		List<EmployeeDto> employeeDtos = list.stream().map( emp -> {
@@ -70,11 +44,48 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	@Cacheable(value = "employeeCacheId")
+	@Cacheable(value = EMPLOYEEE_SINGLE_CACHE, key="#id")
 	public EmployeeDto findEmployeeById(String id) {
 		Optional<Employee> emp = employeeDao.findById(id);
 		return emp.isPresent() ? EmployeeUtil.toDto(emp.get()) : null;
 	}
+
+	@Override
+	@CacheEvict(value = EMPLOYEEE_LIST_CACHE, allEntries = true)
+	@CachePut(value = EMPLOYEEE_SINGLE_CACHE, key="#result.id")
+	public EmployeeDto createEmployee(EmployeeDto employeeDto) {
+		Employee emp = employeeDao.save(EmployeeUtil.toEntity(employeeDto));
+		employeeDto.setId(emp.getId());
+		return employeeDto;
+	}
+
+	@Override
+	@Caching(evict = {
+			@CacheEvict(value = EMPLOYEEE_LIST_CACHE, allEntries = true)
+	})
+	@CachePut(value = EMPLOYEEE_SINGLE_CACHE, key="#root.args[0].id") // @CachePut(value = "employeeCacheId", key="#result.id")
+	public EmployeeDto updateEmployee(EmployeeDto employeeDto) {
+		Optional<Employee> emp = employeeDao.findById(employeeDto.getId());
+
+		if(emp.isPresent()) {
+			Employee model = emp.get();
+			EmployeeUtil.update(model, employeeDto);
+			employeeDao.save(model);
+		}
+
+		return employeeDto;
+	}
+
+	@Override
+	@Caching(evict = {
+		@CacheEvict(value = EMPLOYEEE_LIST_CACHE, allEntries = true),
+	    @CacheEvict(value = EMPLOYEEE_SINGLE_CACHE, key = "#id")
+	})
+	public void deleteEmployeeById(String id) {
+		employeeDao.deleteById(id);
+	}
+
+
 
 	@Override
 	public List<EmployeeDto> findEmployeeByName(String name) {
@@ -86,7 +97,5 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		return employeeDtos;
 	}
-
-
 
 }

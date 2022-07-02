@@ -6,14 +6,14 @@ import com.example.springboot.dto.EmployeeDto;
 
 public interface EmployeeService{
 
-	void createEmployee(EmployeeDto employeeDto);
-	void updateEmployee(EmployeeDto employeeDto);
-	
+	EmployeeDto createEmployee(EmployeeDto employeeDto);
+	EmployeeDto updateEmployee(EmployeeDto employeeDto);
+
 	List<EmployeeDto> findAllEmployee();
 	EmployeeDto findEmployeeById(String id);
 
 	List<EmployeeDto> findEmployeeByName(String name);
 	void deleteEmployeeById(String id);
-	
-	
+
+
 }
