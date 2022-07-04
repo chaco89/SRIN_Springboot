@@ -2,6 +2,8 @@ package com.example.springboot.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.springboot.dto.EmployeeDto;
 
 public interface EmployeeService{
@@ -14,6 +16,7 @@ public interface EmployeeService{
 
 	List<EmployeeDto> findEmployeeByName(String name);
 	void deleteEmployeeById(String id);
+	void uploadFile(MultipartFile file);
 
 
 }

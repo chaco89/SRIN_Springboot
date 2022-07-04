@@ -1,11 +1,16 @@
 package com.example.springboot.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -13,8 +18,10 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.springboot.config.RedisConfig;
+import com.example.springboot.config.SftpConfig.UploadGateway;
 import com.example.springboot.dao.EmployeeDao;
 import com.example.springboot.dto.EmployeeDto;
 import com.example.springboot.model.Employee;
@@ -27,6 +34,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	final String EMPLOYEEE_LIST_CACHE = "EMP_CACHE";
 	final String EMPLOYEEE_SINGLE_CACHE = "EMP_SINGLE_CACHE";
+
+	@Autowired
+	public UploadGateway uploadGateWay;
 
 	@Autowired
 	public EmployeeDao employeeDao;
@@ -97,5 +107,46 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		return employeeDtos;
 	}
+
+	@Value("${sftp.source.directory}")
+	public String sftpSourceDir;
+
+	@Override
+	public void uploadFile(MultipartFile file) {
+		try {
+
+			Function<MultipartFile, String> extractFileName = (f) -> {
+				String originalName = f.getOriginalFilename();
+				String name = originalName.substring(0, originalName.indexOf("."));
+				String ext = originalName.substring(originalName.indexOf("."), originalName.length());
+				return name + ext;
+			};
+
+			String fileName = extractFileName.apply(file);
+			File newFile = new File(sftpSourceDir + fileName);
+        	try (OutputStream os = new FileOutputStream(newFile)) {
+        	    os.write(file.getBytes());
+        	}
+
+			uploadGateWay.upload(newFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/*
+	public void testFunctionalInterface() {
+
+		Consumer<String> printConsumer = (t) -> System.out.println(t);
+		Supplier<String>  textSupplier = () -> "Hello SW Test Academy!";
+		Function<String, String>  toUpperCase = (text) -> {
+
+			return text.toUpperCase();
+		};
+		Predicate<String> containsPredicate = (text) -> "Hello SW Test Academy!".contains(text);
+
+
+	}*/
 
 }
