@@ -1,23 +1,25 @@
 package com.example.springboot.controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.multipart.MultipartFile;
 import com.example.springboot.service.EmployeeService;
 import com.example.springboot.util.ListUtils;
 import com.example.springboot.annotation.CreateMapping;
 import com.example.springboot.annotation.DeleteMapping;
 import com.example.springboot.annotation.UpdateMapping;
+import com.example.springboot.annotation.UploadMapping;
 import com.example.springboot.annotation.ViewMapping;
 import com.example.springboot.config.RedisConfig;
 import com.example.springboot.constant.Path;
@@ -66,7 +68,28 @@ public class EmployeeController extends AbstractController{
 		return sendDeleteResponse();
 	}
 
+	@UploadMapping(path = Path.FILES)
+    public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile file) {
+        try {
+            employeeService.uploadFile(file);
+            return sendCreateResponse(Path.FILES);
+        } catch(Exception ex) {
+        	ex.printStackTrace();
+        	return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
 
+    }
+
+	@DeleteMapping(path = Path.FILES_NAME)
+    public ResponseEntity<Void> delete(@PathVariable String name) {
+        try {
+            employeeService.deleteFile(name);
+            return sendCreateResponse(Path.FILES);
+        } catch(Exception ex) {
+        	ex.printStackTrace();
+        	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 	/* disable this to sync with node js assignment */
 	/*
