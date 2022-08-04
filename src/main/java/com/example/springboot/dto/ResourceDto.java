@@ -27,8 +27,13 @@ public class ResourceDto {
             if (dto.dto == null) {
                 return JsonNull.INSTANCE;
             }
-           
+
             return context.serialize(dto.dto).getAsJsonObject();
         }
     }
+
+    public ResourceDto getResourceDto(Object dto) {
+    	return this;
+    }
+
 }

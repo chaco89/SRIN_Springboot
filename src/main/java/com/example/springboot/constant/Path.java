@@ -10,4 +10,6 @@ public final class Path {
 	public static final String SEARCH_EMPLOYEE = "/search-employee";
 
 	public static final String FILES = "/api/commons/files";
+	public static final String FILES_NAME = "/api/commons/files" + $NAME;
+
 }

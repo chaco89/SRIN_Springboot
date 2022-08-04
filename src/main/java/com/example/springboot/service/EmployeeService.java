@@ -17,6 +17,7 @@ public interface EmployeeService{
 	List<EmployeeDto> findEmployeeByName(String name);
 	void deleteEmployeeById(String id);
 	void uploadFile(MultipartFile file);
+	void deleteFile(String filename);
 
 
 }
