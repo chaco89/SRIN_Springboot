@@ -97,7 +97,7 @@ public class SftpConfig {
 
     @Bean
     @ServiceActivator(inputChannel = "deleteSftpChannel")
-    public MessageHandler delete(String filename) {
+    public MessageHandler delete() {
 		SftpOutboundGateway sftpOutbound = new SftpOutboundGateway(sftpSessionFactory(), "rm", "payload");
 		return sftpOutbound;
     }
