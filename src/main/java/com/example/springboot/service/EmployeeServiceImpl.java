@@ -107,7 +107,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeDtos;
 	}
 
-	@Value("${sftp.source.directory}")
+	@Value("${sftp.source.directory:/}")
 	public String sftpSourceDir;
 
 	@Override
