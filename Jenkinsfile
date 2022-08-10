@@ -7,7 +7,7 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Build Jar file') {
             steps {
                 // Get some code from a GitHub repository
                 // git 'https://github.com/jglick/simple-maven-project-with-tests.git'
@@ -25,9 +25,17 @@ pipeline {
                 success {
                     //junit '**/target/surefire-reports/TEST-*.xml'
                     archiveArtifacts 'target/*.jar'
-                    bat 'java -jar -Dspring.profiles.active=jenkins target/spring-boot-complete-0.0.1-SNAPSHOT.jar'
+                    //bat 'java -jar -Dspring.profiles.active=jenkins target/spring-boot-complete-0.0.1-SNAPSHOT.jar'
                 }
             }
         }
+        
+        stage('Build Docker image') {
+            steps {
+                bat 'docker build -t spring-boot-image .'
+                bat 'docker run -p 8080:8080 spring-boot-image'
+            }
+        }
+        
     }
 }
