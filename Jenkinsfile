@@ -33,7 +33,7 @@ pipeline {
         stage('Build Docker image') {
             steps {
                 bat 'docker build -t spring-boot-image .'
-                bat 'docker run -p 8080:8080 -p 6379:6379 spring-boot-image'
+                bat 'docker run -p 8080:8080 spring-boot-image'
             }
         }
         
